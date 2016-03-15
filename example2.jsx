@@ -1,4 +1,6 @@
 
+
+
 var MyLabel = React.createClass({
    render: function() {
     return <div>{this.props.text}</div>;
@@ -67,8 +69,8 @@ var ButtonLabel = 'Add';
 var MyTableCell = React.createClass({
 
     _deleteValue: function (e) {
-      this.props.remover(e.target.parentElement.id);
-      
+      var id = e.target.parentElement.parentElement.id;
+      this.props.remover(id);
     },
     render: function () {     
         return (
@@ -88,8 +90,6 @@ var MyTableCell = React.createClass({
 var Contador = React.createClass({
 
   render: function(){
-    
-    console.log(this.props.total);
     return(
 
       <div>Total: {this.props.total} horas</div>);
@@ -108,7 +108,7 @@ var DynamicList = React.createClass({
   	 }
     }
     return (
-      <table>
+      <table className="table-borda">
         <thead>
           <tr>
             <th> Time </th>
@@ -135,17 +135,24 @@ var ListCreator = React.createClass({
   },
   _okClicked: function(event) {
     var data = this.state.data;
-    data.push({
-      time: event.target.parentElement.childNodes[1].value, 
-      type: event.target.parentElement.childNodes[2].value, 
-      date: event.target.parentElement.childNodes[3].value
-    });
-    var total = parseInt(event.target.parentElement.childNodes[1].value) + parseInt(this.state.total);
+    var time = event.target.parentElement.childNodes[1].value;
+    var type = event.target.parentElement.childNodes[2].value;
+    var date = event.target.parentElement.childNodes[3].value;
 
-    this.setState({data: data});
-    this.setState({rows: parseInt(this.state.data.length)});
-    this.setState({total: total});
-    
+    if (time == '' || type == '' || date == '') {
+      alert('Algum campo vazio!');
+    } else { 
+      data.push({
+        time: time, 
+        type: type, 
+        date: date
+      });
+      var total = parseInt(time) + parseInt(this.state.total);
+
+      this.setState({data: data});
+      this.setState({rows: parseInt(this.state.data.length)});
+      this.setState({total: total});
+    }
   },
   _dataChanged: function(newValue) {
      
@@ -153,40 +160,33 @@ var ListCreator = React.createClass({
   _removeData: function(id) {
     var index = parseInt(id);
     var data = this.state.data;
-    
-    console.log(id);
-    console.log(index);
-    console.log(data[0].time);
-
-    var total = parseInt(this.state.total) - parseInt(data[0].time);
-
+    var total = this.state.total - parseInt(data[index].time);
     data.splice(index, 1);
-    console.log(data);
+
     this.setState({data: data});
     this.setState({rows: parseInt(this.state.data.length)});
     this.setState({total: total});
-
-    console.log('Aqui1 '+ parseInt(this.state.total));
-    console.log(data);
     
     //var total = parseInt(this.state.total) - parseInt(data.parentElement.childNodes[1].value);
     
-    console.log('Aqui2 '+  parseInt(this.state.total));
-
   },
   render: function() {
-   return   <div className='containing'> 
-              <div className='left-side'>      
-               <MyLabel  text='Work' />
-               <MyTextfield onChange={this._dataChanged} name='Time' />
-               <MySelectfield onChange={this._dataChanged} name='Type' />
-               <MyTextfield onChange={this._dataChanged} name='Data: XX/XX/XXXX' />
-               <MyButton textlabel={ButtonLabel} onClick={this._okClicked} />
+   return   <div className='containing'>
+              <div className='left-side-parent'> 
+                <div className='left-side'>      
+                 <MyLabel text='' />
+                 <MyTextfield onChange={this._dataChanged} name='Time' />
+                 <MySelectfield onChange={this._dataChanged} name='Type' />
+                 <MyTextfield onChange={this._dataChanged} name='Data: XX/XX/XXXX' />
+                 <MyButton textlabel={ButtonLabel} onClick={this._okClicked} />
+                </div>
               </div>
-              <div className='right-side'>
-               <DynamicList rows={this.state.rows} data={this.state.data} remover={this._removeData} />
+              <div className='right-side-parent'>
+                <div className='right-side'>
+                 <DynamicList rows={this.state.rows} data={this.state.data} remover={this._removeData} />
+                </div>
               </div>
-              <div ><Contador  total={this.state.total}/></div>
+              <div className='total-fixed'><Contador  total={this.state.total}/></div>
             </div>;
   }
 });
