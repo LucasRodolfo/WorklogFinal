@@ -1,6 +1,4 @@
 
-
-
 var MyLabel = React.createClass({
    render: function() {
     return <div>{this.props.text}</div>;
@@ -19,7 +17,7 @@ var MyButton = React.createClass({
 });
 
 
-var MyTextfield = React.createClass({
+var MyTextfield = React.createClass({  //criar as caixas de textos para entrada da data e tempo
   getInitialState: function() {
      return {
       data: this.props.name
@@ -38,7 +36,7 @@ var MyTextfield = React.createClass({
   }
 });
 
-var MySelectfield = React.createClass({
+var MySelectfield = React.createClass({ //cria o select de atividades
   getInitialState: function() {
      return {
       data: this.props.name
@@ -66,7 +64,7 @@ var MySelectfield = React.createClass({
 
 var ButtonLabel = 'Add';
 
-var MyTableCell = React.createClass({
+var MyTableCell = React.createClass({  //insere os novos dados nas novas celular da tabela
 
     _deleteValue: function (e) {
       var id = e.target.parentElement.parentElement.id;
@@ -87,19 +85,16 @@ var MyTableCell = React.createClass({
     }
 });
 
-var Contador = React.createClass({
+var Contador = React.createClass({ //Recebe o total de horas que deve aparecer na tela
 
   render: function(){
     return(
 
-      <div>Total: {this.props.total} horas</div>);
-    
+      <div>Total: {this.props.total} horas</div>);  
   }
-
-
 });
 
-var DynamicList = React.createClass({
+var DynamicList = React.createClass({  //cria a tabela e recebe os dados que devem ser colocados
   render: function() {
   	var rows =  [];
     if (this.props.rows != 0){
@@ -133,7 +128,7 @@ var ListCreator = React.createClass({
       rows: 0, total:0
     };
   },
-  _okClicked: function(event) {
+  _okClicked: function(event) {   //recebe a entrada de novos valores e verifica eles
     var data = this.state.data;
     var time = event.target.parentElement.childNodes[1].value;
     var type = event.target.parentElement.childNodes[2].value;
@@ -157,7 +152,7 @@ var ListCreator = React.createClass({
   _dataChanged: function(newValue) {
      
   },
-  _removeData: function(id) {
+  _removeData: function(id) {     //recebe o id da linha que vai ser removida e atualiza os dados
     var index = parseInt(id);
     var data = this.state.data;
     var total = this.state.total - parseInt(data[index].time);
@@ -167,8 +162,6 @@ var ListCreator = React.createClass({
     this.setState({rows: parseInt(this.state.data.length)});
     this.setState({total: total});
     
-    //var total = parseInt(this.state.total) - parseInt(data.parentElement.childNodes[1].value);
-    
   },
   render: function() {
    return   <div className='containing'>
@@ -177,7 +170,7 @@ var ListCreator = React.createClass({
                  <MyLabel text='' />
                  <MyTextfield onChange={this._dataChanged} name='Time' />
                  <MySelectfield onChange={this._dataChanged} name='Type' />
-                 <MyTextfield onChange={this._dataChanged} name='Data: XX/XX/XXXX' />
+                 <MyTextfield onChange={this._dataChanged} name='Data: XX/XX/XXXX' />  //desculpe pela gambiarra, nao consegui usar o jQuery com o React
                  <MyButton textlabel={ButtonLabel} onClick={this._okClicked} />
                 </div>
               </div>
